@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy 18th Birthday Joffin 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep-black: #020008;
+    --cosmic-violet: #1a0533;
+    --electric-violet: #7b2fff;
+    --soft-violet: #b06fff;
+    --lunar-blue: #1e1060;
+    --star-white: #e8e0ff;
+    --gold-accent: #ffd700;
+    --rose-accent: #ff6eb4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep-black);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    cursor: default;
+  }
+
+  /* ===== STAR CANVAS ===== */
+  #starCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ===== COSMIC BG ===== */
+  .cosmic-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(123,47,255,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 20% 50%, rgba(30,16,96,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 30%, rgba(26,5,51,0.5) 0%, transparent 60%),
+      linear-gradient(180deg, #020008 0%, #0a0120 40%, #020008 100%);
+    z-index: 0;
+  }
+
+  /* Giant planet glow */
+  .planet-glow {
+    position: fixed;
+    top: -30vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70vw;
+    height: 70vw;
+    max-width: 600px;
+    max-height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,5,51,0.0) 55%, rgba(123,47,255,0.15) 70%, rgba(80,20,180,0.3) 80%, rgba(30,16,96,0.5) 90%, transparent 100%);
+    box-shadow: 0 0 120px 60px rgba(123,47,255,0.08);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ===== INTRO SCREEN ===== */
+  #introScreen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    background: radial-gradient(ellipse at center, #0a0120 0%, #020008 100%);
+  }
+
+  .intro-title {
+    font-family: 'Cinzel Decorative', cursive;
+    color: var(--soft-violet);
+    font-size: clamp(1rem, 4vw, 1.6rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeInDown 1s 0.5s forwards;
+    text-shadow: 0 0 30px rgba(176,111,255,0.6);
+  }
+
+  .tap-hint {
+    font-family: 'IM Fell English', serif;
+    color: rgba(176,111,255,0.7);
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    margin-top: 2rem;
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: fadeInUp 1s 1s forwards;
+  }
+
+  /* ===== GIFT BOX ===== */
+  .gift-wrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(123,47,255,0.5));
+    transition: transform 0.15s ease;
+  }
+
+  .gift-wrapper:active { transform: scale(0.93); }
+
+  .gift-box {
+    position: relative;
+    width: 160px;
+    height: 120px;
+    bottom: 0;
+  }
+
+  /* Box body */
+  .box-body {
+    position: absolute;
+    bottom: 0;
+    width: 160px;
+    height: 100px;
+    background: linear-gradient(135deg, #3d0a7a, #1a0533);
+    border: 2px solid rgba(123,47,255,0.6);
+    border-radius: 4px;
+    box-shadow:
+      inset 0 0 20px rgba(123,47,255,0.2),
+      0 0 40px rgba(123,47,255,0.3);
+  }
+
+  /* Ribbon vertical */
+  .box-body::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 0;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--rose-accent), #ff8cd1);
+    opacity: 0.9;
+  }
+
+  /* Sparkle dots on box */
+  .box-body::after {
+    content: '✦ ✦ ✦';
+    position: absolute;
+    bottom: 12px;
+    width: 100%;
+    text-align: center;
+    color: rgba(255,215,0,0.5);
+    font-size: 12px;
+    letter-spacing: 12px;
+  }
+
+  /* Box lid */
+  .box-lid {
+    position: absolute;
+    top: 0;
+    width: 160px;
+    height: 30px;
+    background: linear-gradient(135deg, #5a10b0, #2a0560);
+    border: 2px solid rgba(176,111,255,0.7);
+    border-radius: 4px;
+    transform-origin: bottom center;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 20px rgba(123,47,255,0.4);
+  }
+
+  /* Lid ribbon */
+  .box-lid::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 0;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--rose-accent), #ff8cd1);
+  }
+
+  /* Bow */
+  .bow {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 28px;
+  }
+
+  .bow-left, .bow-right {
+    position: absolute;
+    top: 0;
+    width: 26px;
+    height: 22px;
+    background: radial-gradient(ellipse, #ff6eb4, #cc2d7a);
+    border-radius: 50% 0 50% 50%;
+    box-shadow: 0 0 10px rgba(255,110,180,0.6);
+  }
+
+  .bow-left {
+    left: 0;
+    transform: rotate(-30deg) skewX(-10deg);
+  }
+
+  .bow-right {
+    right: 0;
+    transform: rotate(30deg) skewX(10deg) scaleX(-1);
+  }
+
+  .bow-center {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, #ffd700, #ff6eb4);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255,215,0,0.8);
+  }
+
+  /* Tap counter ring */
+  .tap-ring {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    border: 2px solid rgba(123,47,255,0.0);
+    transition: all 0.3s ease;
+  }
+
+  .tap-ring.pulse {
+    animation: ringPulse 0.4s ease-out forwards;
+  }
+
+  .tap-counter {
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+
+  .tap-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid rgba(176,111,255,0.5);
+    transition: all 0.3s ease;
+  }
+
+  .tap-dot.active {
+    background: var(--soft-violet);
+    border-color: var(--soft-violet);
+    box-shadow: 0 0 10px rgba(176,111,255,0.8);
+  }
+
+  /* Lid open state */
+  .lid-open {
+    transform: rotateX(-110deg) translateY(-10px) !important;
+  }
+
+  /* ===== BALLOONS ===== */
+  .balloon-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99;
+    overflow: hidden;
+  }
+
+  .balloon {
+    position: absolute;
+    bottom: -120px;
+    font-size: 40px;
+    animation: floatUp linear forwards;
+    opacity: 0;
+  }
+
+  /* ===== MAIN APP ===== */
+  #mainApp {
+    display: none;
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding: 3rem 1rem 1rem;
+    position: relative;
+  }
+
+  .header-subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--rose-accent);
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    letter-spacing: 0.3em;
+    opacity: 0;
+    animation: fadeInDown 1s 0.3s forwards;
+    text-shadow: 0 0 20px rgba(255,110,180,0.5);
+    margin-bottom: 0.5rem;
+  }
+
+  .header-name {
+    font-family: 'Cinzel Decorative', cursive;
+    color: var(--star-white);
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    font-weight: 900;
+    opacity: 0;
+    animation: fadeInDown 1s 0.5s forwards;
+    text-shadow:
+      0 0 40px rgba(123,47,255,0.8),
+      0 0 80px rgba(123,47,255,0.4),
+      0 0 120px rgba(80,20,180,0.3);
+    line-height: 1.1;
+  }
+
+  .header-18 {
+    font-family: 'Cinzel Decorative', cursive;
+    color: var(--gold-accent);
+    font-size: clamp(1.2rem, 5vw, 2.5rem);
+    font-weight: 700;
+    opacity: 0;
+    animation: fadeInUp 1s 0.7s forwards;
+    text-shadow: 0 0 30px rgba(255,215,0,0.6);
+    margin-top: 0.3rem;
+    letter-spacing: 0.2em;
+  }
+
+  /* Stars decoration */
+  .star-divider {
+    color: var(--soft-violet);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s 0.9s forwards;
+    margin: 1rem 0;
+  }
+
+  /* ===== PARTICLE RING ===== */
+  .orbit-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin: 0 auto 1rem;
+    opacity: 0;
+    animation: fadeIn 1.5s 1s forwards;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(123,47,255,0.2);
+    animation: orbitSpin 20s linear infinite;
+  }
+
+  .orbit-ring:nth-child(2) {
+    inset: 15px;
+    border-color: rgba(176,111,255,0.15);
+    animation-duration: 15s;
+    animation-direction: reverse;
+  }
+
+  .orbit-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--soft-violet);
+    box-shadow: 0 0 8px var(--soft-violet);
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* ===== CAKE ===== */
+  .cake-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cake {
+    position: relative;
+    font-size: 90px;
+    animation: cakePulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255,110,180,0.5)) drop-shadow(0 0 40px rgba(123,47,255,0.4));
+    cursor: default;
+    user-select: none;
+  }
+
+  .cake-sparkles {
+    position: absolute;
+    inset: -20px;
+    pointer-events: none;
+  }
+
+  .sparkle-item {
+    position: absolute;
+    font-size: 16px;
+    animation: sparkleFloat 2s ease-in-out infinite;
+  }
+
+  .sparkle-item:nth-child(1) { top: 0; left: 20%; animation-delay: 0s; }
+  .sparkle-item:nth-child(2) { top: 10%; right: 10%; animation-delay: 0.4s; }
+  .sparkle-item:nth-child(3) { bottom: 10%; left: 5%; animation-delay: 0.8s; }
+  .sparkle-item:nth-child(4) { bottom: 0; right: 20%; animation-delay: 1.2s; }
+  .sparkle-item:nth-child(5) { top: 40%; left: -10%; animation-delay: 0.6s; }
+  .sparkle-item:nth-child(6) { top: 40%; right: -10%; animation-delay: 1s; }
+
+  /* ===== MESSAGE CARD ===== */
+  .message-section {
+    padding: 0 1.5rem 3rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeInUp 1.5s 1.2s forwards;
+  }
+
+  .message-card {
+    position: relative;
+    background: linear-gradient(135deg,
+      rgba(26,5,51,0.9) 0%,
+      rgba(10,1,32,0.95) 50%,
+      rgba(26,5,51,0.9) 100%);
+    border: 1px solid rgba(123,47,255,0.35);
+    border-radius: 16px;
+    padding: 2rem 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow:
+      0 0 60px rgba(123,47,255,0.12),
+      inset 0 0 40px rgba(123,47,255,0.05),
+      0 0 0 1px rgba(255,255,255,0.04);
+    overflow: hidden;
+  }
+
+  .message-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 10%;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--electric-violet), var(--rose-accent), var(--electric-violet), transparent);
+    opacity: 0.7;
+  }
+
+  .message-card::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 10%;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--electric-violet), var(--rose-accent), var(--electric-violet), transparent);
+    opacity: 0.7;
+  }
+
+  /* Corner stars */
+  .corner-star {
+    position: absolute;
+    color: var(--gold-accent);
+    font-size: 14px;
+    opacity: 0.6;
+    animation: cornerTwinkle 3s ease-in-out infinite;
+  }
+
+  .corner-star:nth-child(1) { top: 8px; left: 12px; animation-delay: 0s; }
+  .corner-star:nth-child(2) { top: 8px; right: 12px; animation-delay: 0.7s; }
+  .corner-star:nth-child(3) { bottom: 8px; left: 12px; animation-delay: 1.4s; }
+  .corner-star:nth-child(4) { bottom: 8px; right: 12px; animation-delay: 2.1s; }
+
+  .message-greeting {
+    font-family: 'Cinzel Decorative', cursive;
+    color: var(--gold-accent);
+    font-size: clamp(0.85rem, 3vw, 1.1rem);
+    text-align: center;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  }
+
+  .message-text {
+    font-family: 'IM Fell English', serif;
+    color: var(--star-white);
+    font-size: clamp(1rem, 3.5vw, 1.2rem);
+    line-height: 1.85;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  .message-text .highlight {
+    color: var(--rose-accent);
+    font-style: italic;
+    text-shadow: 0 0 15px rgba(255,110,180,0.4);
+  }
+
+  .message-text .divine {
+    color: var(--gold-accent);
+    text-shadow: 0 0 15px rgba(255,215,0,0.4);
+  }
+
+  .message-text .fun {
+    color: var(--soft-violet);
+    text-shadow: 0 0 15px rgba(176,111,255,0.4);
+  }
+
+  .message-text .emoji-big {
+    font-size: 1.4em;
+    filter: drop-shadow(0 0 6px rgba(255,110,180,0.6));
+  }
+
+  .message-divider {
+    text-align: center;
+    color: rgba(176,111,255,0.4);
+    font-size: 1rem;
+    letter-spacing: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  /* ===== FLOATING CONFETTI ===== */
+  .confetti-piece {
+    position: fixed;
+    top: -20px;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+    animation: confettiFall linear infinite;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 1rem 1rem 3rem;
+    opacity: 0;
+    animation: fadeIn 2s 1.5s forwards;
+  }
+
+  .footer-text {
+    font-family: 'Cinzel Decorative', cursive;
+    color: rgba(176,111,255,0.5);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+  }
+
+  /* ===== FIREWORK CANVAS ===== */
+  #fireworkCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes orbitSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes cakePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  @keyframes sparkleFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+    50% { transform: translateY(-8px) scale(1.2); opacity: 1; }
+  }
+
+  @keyframes cornerTwinkle {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  @keyframes floatUp {
+    0% { bottom: -120px; opacity: 1; transform: translateX(0) rotate(0deg); }
+    20% { opacity: 1; }
+    80% { opacity: 0.8; }
+    100% { bottom: 110vh; opacity: 0; transform: translateX(var(--drift)) rotate(var(--spin)); }
+  }
+
+  @keyframes ringPulse {
+    0% { border-color: rgba(123,47,255,0.0); transform: scale(0.9); }
+    50% { border-color: rgba(176,111,255,0.8); transform: scale(1.3); }
+    100% { border-color: rgba(123,47,255,0.0); transform: scale(1.6); opacity: 0; }
+  }
+
+  @keyframes confettiFall {
+    0% { top: -20px; opacity: 1; transform: rotate(0deg) translateX(0); }
+    100% { top: 110vh; opacity: 0; transform: rotate(720deg) translateX(var(--drift)); }
+  }
+
+  @keyframes introExit {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.1); pointer-events: none; }
+  }
+
+  @keyframes mainEntrance {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Tap shake animation */
+  @keyframes boxShake {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(-5deg) scale(1.05); }
+    40% { transform: rotate(5deg) scale(1.05); }
+    60% { transform: rotate(-3deg); }
+    80% { transform: rotate(3deg); }
+  }
+
+  .shake { animation: boxShake 0.4s ease-in-out; }
+</style>
+</head>
+<body>
+
+<canvas id="starCanvas"></canvas>
+<div class="cosmic-bg"></div>
+<div class="planet-glow"></div>
+<canvas id="fireworkCanvas"></canvas>
+<div class="balloon-container" id="balloonContainer"></div>
+
+<!-- ===== INTRO SCREEN ===== -->
+<div id="introScreen">
+  <p class="intro-title">A gift awaits you...</p>
+
+  <div class="gift-wrapper" id="giftWrapper" onclick="tapGift()">
+    <div class="tap-ring" id="tapRing"></div>
+    <div class="gift-box">
+      <div class="box-lid" id="boxLid">
+        <div class="bow">
+          <div class="bow-left"></div>
+          <div class="bow-right"></div>
+          <div class="bow-center"></div>
+        </div>
+      </div>
+      <div class="box-body"></div>
+    </div>
+    <div class="tap-counter">
+      <div class="tap-dot" id="dot1"></div>
+      <div class="tap-dot" id="dot2"></div>
+      <div class="tap-dot" id="dot3"></div>
+    </div>
+  </div>
+
+  <p class="tap-hint">Tap the gift 3 times to open ✦</p>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="mainApp">
+
+  <div class="header">
+    <p class="header-subtitle">✦ &nbsp; A Celestial Celebration &nbsp; ✦</p>
+    <h1 class="header-name">Joffin</h1>
+    <p class="header-18">🎉 The 18th Chapter 🎉</p>
+    <div class="star-divider">✦ ✦ ✦ ✦ ✦</div>
+  </div>
+
+  <!-- Orbit + Cake -->
+  <div class="orbit-container">
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="cake-wrapper">
+      <div class="cake" id="mainCake">
+        🎂
+        <div class="cake-sparkles">
+          <span class="sparkle-item">✨</span>
+          <span class="sparkle-item">⭐</span>
+          <span class="sparkle-item">🌟</span>
+          <span class="sparkle-item">✨</span>
+          <span class="sparkle-item">💫</span>
+          <span class="sparkle-item">⭐</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Card -->
+  <div class="message-section">
+    <div class="message-card">
+      <span class="corner-star">✦</span>
+      <span class="corner-star">✦</span>
+      <span class="corner-star">✦</span>
+      <span class="corner-star">✦</span>
+
+      <p class="message-greeting">— Happy 18th Birthday —</p>
+
+      <div class="message-divider">· · ·</div>
+
+      <p class="message-text">
+        <span class="highlight">You are an adult now.</span>
+      </p>
+
+      <div class="message-divider">· · ·</div>
+
+      <p class="message-text">
+        We have lived <span class="fun">6 years of our teen together</span> and had
+        <span class="highlight">clashes and fun.</span>
+      </p>
+
+      <div class="message-divider">· · ·</div>
+
+      <p class="message-text">
+        <span class="divine">May Jesus fulfill all your wishes</span> and you stay
+        <span class="highlight">healthy and happy forever.</span>
+      </p>
+
+      <div class="message-divider">· · ·</div>
+
+      <p class="message-text">
+        <span class="divine">May your family and kins stay blessed too.</span>
+      </p>
+
+      <div class="message-divider">· · ·</div>
+
+      <p class="message-text" style="font-size:1.4em;">
+        <span class="highlight" style="font-family:'Cinzel Decorative',cursive; font-size:0.85em; letter-spacing:0.1em;">ENJOY</span>
+        &nbsp;<span class="emoji-big">😍</span>&nbsp;<span class="emoji-big">😊</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p class="footer-text">✦ &nbsp; With love, on your cosmic journey &nbsp; ✦</p>
+  </div>
+</div>
+
+<script>
+// ===== STAR FIELD =====
+const starCanvas = document.getElementById('starCanvas');
+const sCtx = starCanvas.getContext('2d');
+
+function resizeCanvas() {
+  starCanvas.width = window.innerWidth;
+  starCanvas.height = window.innerHeight;
+  fireworkCanvas.width = window.innerWidth;
+  fireworkCanvas.height = window.innerHeight;
+}
+
+const stars = [];
+function initStars() {
+  stars.length = 0;
+  for (let i = 0; i < 250; i++) {
+    stars.push({
+      x: Math.random() * starCanvas.width,
+      y: Math.random() * starCanvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      a: Math.random(),
+      speed: Math.random() * 0.005 + 0.002,
+      color: Math.random() > 0.7 ? '#b06fff' : '#e8e0ff'
+    });
+  }
+}
+
+function drawStars() {
+  sCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+  stars.forEach(s => {
+    s.a += s.speed;
+    const alpha = (Math.sin(s.a) + 1) / 2 * 0.8 + 0.1;
+    sCtx.beginPath();
+    sCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    sCtx.fillStyle = s.color.replace(')', `,${alpha})`).replace('rgb', 'rgba').replace('#', '');
+    // Simple approach:
+    sCtx.globalAlpha = alpha;
+    sCtx.fillStyle = s.color;
+    sCtx.fill();
+  });
+  sCtx.globalAlpha = 1;
+  requestAnimationFrame(drawStars);
+}
+
+// ===== FIREWORKS =====
+const fireworkCanvas = document.getElementById('fireworkCanvas');
+const fCtx = fireworkCanvas.getContext('2d');
+const particles = [];
+
+function createFirework(x, y) {
+  const colors = ['#7b2fff','#b06fff','#ff6eb4','#ffd700','#e8e0ff','#ff8cd1'];
+  for (let i = 0; i < 60; i++) {
+    const angle = (Math.PI * 2 / 60) * i;
+    const speed = Math.random() * 4 + 1.5;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      alpha: 1,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      r: Math.random() * 3 + 1,
+      decay: Math.random() * 0.015 + 0.01
+    });
+  }
+}
+
+function animateFireworks() {
+  fCtx.clearRect(0, 0, fireworkCanvas.width, fireworkCanvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.05;
+    p.alpha -= p.decay;
+    if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+    fCtx.globalAlpha = p.alpha;
+    fCtx.beginPath();
+    fCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    fCtx.fillStyle = p.color;
+    fCtx.fill();
+  }
+  fCtx.globalAlpha = 1;
+  requestAnimationFrame(animateFireworks);
+}
+
+// ===== GIFT BOX LOGIC =====
+let tapCount = 0;
+let isOpening = false;
+
+function tapGift() {
+  
+  if (isOpening) return;
+  tapCount++;
+
+  // Activate dot
+  const dot = document.getElementById(`dot${tapCount}`);
+  if (dot) dot.classList.add('active');
+
+  // Shake
+  const wrapper = document.getElementById('giftWrapper');
+  wrapper.classList.remove('shake');
+  void wrapper.offsetWidth;
+  wrapper.classList.add('shake');
+
+  // Pulse ring
+  const ring = document.getElementById('tapRing');
+  ring.classList.remove('pulse');
+  void ring.offsetWidth;
+  ring.classList.add('pulse');
+
+  // Lid trembles on 2nd tap
+  if (tapCount === 2) {
+    const lid = document.getElementById('boxLid');
+    lid.style.transform = 'rotateX(-20deg)';
+    setTimeout(() => lid.style.transform = '', 300);
+  }
+
+  if (tapCount >= 3) {
+    isOpening = true;
+    setTimeout(openGift, 200);
+  }
+}
+
+function openGift() {
+  const lid = document.getElementById('boxLid');
+  lid.classList.add('lid-open');
+
+  // Launch balloons
+  setTimeout(launchBalloons, 400);
+  // Fireworks
+  setTimeout(launchFireworks, 500);
+  // Show main app after delay
+  setTimeout(showMainApp, 2200);
+}
+
+const balloonEmojis = ['🎈','🎈','🎈','🎉','🎊','🎈','🎈','💜','🎈','🎈','🎉','🎊'];
+
+function launchBalloons() {
+  const container = document.getElementById('balloonContainer');
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      b.textContent = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+      const leftPct = 20 + Math.random() * 60;
+      const duration = 2.5 + Math.random() * 2;
+      const drift = (Math.random() - 0.5) * 200 + 'px';
+      const spin = (Math.random() - 0.5) * 180 + 'deg';
+      b.style.cssText = `
+        left: ${leftPct}%;
+        font-size: ${30 + Math.random() * 25}px;
+        animation: floatUp ${duration}s ease-out forwards;
+        --drift: ${drift};
+        --spin: ${spin};
+        animation-delay: ${Math.random() * 0.6}s;
+      `;
+      container.appendChild(b);
+      setTimeout(() => b.remove(), (duration + 1) * 1000);
+    }, i * 80);
+  }
+}
+
+function launchFireworks() {
+  const positions = [
+    [window.innerWidth * 0.2, window.innerHeight * 0.4],
+    [window.innerWidth * 0.8, window.innerHeight * 0.3],
+    [window.innerWidth * 0.5, window.innerHeight * 0.5],
+    [window.innerWidth * 0.3, window.innerHeight * 0.6],
+    [window.innerWidth * 0.7, window.innerHeight * 0.5],
+  ];
+  positions.forEach(([x, y], i) => {
+    setTimeout(() => createFirework(x, y), i * 250);
+  });
+}
+
+function showMainApp() {
+  const intro = document.getElementById('introScreen');
+  intro.style.animation = 'introExit 0.8s ease-in-out forwards';
+
+  setTimeout(() => {
+    intro.style.display = 'none';
+    const main = document.getElementById('mainApp');
+    main.style.display = 'block';
+    main.style.animation = 'mainEntrance 1s ease forwards';
+
+    // ▶ Play music when main card appears
+    const audio = document.getElementById('birthdayAudio');
+    audio.play().catch(e => console.log('Audio blocked:', e));
+
+    // Extra fireworks on main app
+    setTimeout(() => {
+      launchFireworks();
+      setTimeout(launchFireworks, 1500);
+      setTimeout(launchFireworks, 3000);
+    }, 500);
+
+    // Continuous confetti
+    startConfetti();
+
+    // Periodic balloon celebration
+    setInterval(() => {
+      if (Math.random() > 0.5) launchSingleBalloon();
+    }, 1500);
+
+    // Periodic fireworks
+    setInterval(() => {
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight * 0.6;
+      createFirework(x, y);
+    }, 3000);
+
+  }, 800);
+}
+
+function launchSingleBalloon() {
+  const container = document.getElementById('balloonContainer');
+  const b = document.createElement('div');
+  b.className = 'balloon';
+  b.textContent = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+  const leftPct = 5 + Math.random() * 90;
+  const duration = 5 + Math.random() * 4;
+  const drift = (Math.random() - 0.5) * 150 + 'px';
+  const spin = (Math.random() - 0.5) * 90 + 'deg';
+  b.style.cssText = `left:${leftPct}%;font-size:${24+Math.random()*20}px;animation:floatUp ${duration}s ease-out forwards;--drift:${drift};--spin:${spin};`;
+  container.appendChild(b);
+  setTimeout(() => b.remove(), (duration + 1) * 1000);
+}
+
+// ===== CONFETTI =====
+const confettiColors = ['#7b2fff','#b06fff','#ff6eb4','#ffd700','#e8e0ff','#ff4488','#00d4ff'];
+function startConfetti() {
+  function spawnConfetti() {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    const drift = (Math.random() - 0.5) * 200 + 'px';
+    c.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: ${confettiColors[Math.floor(Math.random() * confettiColors.length)]};
+      width: ${4 + Math.random() * 8}px;
+      height: ${4 + Math.random() * 8}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation: confettiFall ${4 + Math.random() * 4}s linear forwards;
+      --drift: ${drift};
+      animation-delay: ${Math.random() * 2}s;
+      opacity: 1;
+    `;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 8000);
+  }
+  setInterval(spawnConfetti, 300);
+}
+
+// ===== INIT =====
+window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+resizeCanvas();
+initStars();
+drawStars();
+animateFireworks();
+</script>
+<audio id="birthdayAudio" loop>
+  <source src="Audio.mp3" type="audio/mpeg">
+</audio>
+</body>
+</html>
